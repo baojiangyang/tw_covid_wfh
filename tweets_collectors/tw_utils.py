@@ -2,12 +2,18 @@ import tweepy
 import csv
 import json
 
-if True: # diaryofchrisyang
+if False: # diaryofchrisyang
     consumer_key = '897rmQRKIPrJDVgMy9BhfHreV'
     consumer_secret = 'Ep6DrbHJqH4VougblonygNTu2L9KBlfRdWDMQ8iraevl4CSpkR'
 
     access_token = '293217371-t8MxrKbD2qylq2lT5msNggB0oqAMIRy7CLs1lAho'
     access_token_secret = 'ekSdjLKU0xX0wFZnO5exhBFi4DLpL6PaY3J6lCPhwogNQ'
+if True: # ucf
+    consumer_key = '1EfZQhitx7xPfHz25VCLpfjtR'
+    consumer_secret = '5GZZcn5EFinqTggFeZKH3ObuOp019vYwPxNTqNvyZM78b5VIkh'
+
+    access_token = '1249748173251170304-qXxrOVqD2eMkwAM6nxtPLvLKcnJTzo'
+    access_token_secret = 'vILIpWoKrhaUYDGpv5YC53xpEgvnbzJO0ih4RkRH2fNKr'
 
 # AUTH
 
@@ -93,7 +99,7 @@ def loc_to_state(s):
         return ss
 
 
-    if len(s) > 0 and len(s.split(',')) > 1: 
+    if len(s) > 0 and len(s.split(',')) > 1:
 
         places = s.split(',')
         for p in places:
@@ -113,7 +119,7 @@ def search_qualified_tweets(search_term, date_since, date_until):
     for tweet in tweepy.Cursor(api.search, q='\"{}\" -filter:retweets'.format(search_term)
             , count=200
             , lang='en'
-            , locations = [-125,25,-65,48] 
+            , locations = [-125,25,-65,48]
             , since = date_since
             , until = date_until
             , tweet_mode='extended'
@@ -146,12 +152,56 @@ def search_qualified_tweets(search_term, date_since, date_until):
             #    break
             #else:
             #    pass
-    search_term_reformated = search_term.replace(" ", "_") 
+    search_term_reformated = search_term.replace(" ", "_")
     with open('data/{}.json'.format(search_term_reformated), 'w') as f:
         json.dump(data, f)
         print('done!')
 
 
+
+def search_qualified_tweets_twitterAPI(search_term, date_since, date_until):
+    data = [] # empty list to which tweet_details obj will be added
+    counter = 0 # counter to keep track of each iteration
+    for tweet in tweepy.Cursor(api.search, q='\"{}\" -filter:retweets'.format(search_term)
+            , count=200
+            , lang='en'
+            , locations = [-125,25,-65,48]
+            , since = date_since
+            , until = date_until
+            , tweet_mode='extended'
+            ).items():
+        ## only original tweets
+        if True:
+            tweet_details = {}
+            tweet_details['name'] = tweet.user.screen_name
+            tweet_details['tweet'] = tweet.full_text
+            tweet_details['retweets'] = tweet.retweet_count
+            #tweet_details['location'] = tweet.user.location
+            tweet_details['created'] = tweet.created_at.strftime("%d-%b-%Y")
+            tweet_details['followers'] = tweet.user.followers_count
+
+            #Iterate through different types of geodata to get the variable primary_geo
+            if tweet.place:
+                tweet_details['location'] = tweet.place.full_name + ", " + tweet.place.country
+                tweet_details["geo_type"] = "Tweet place"
+            else:
+                tweet_details['location'] = tweet.user.location
+                tweet_details["geo_type"] = "User location"
+                #Add only tweets with some geo data to .json. Comment this if you want to include all tweets.
+                if tweet_details['location'] and len(loc_to_state(tweet_details['location']))>0 \
+                        and tweet.retweet_count == 0:
+                            data.append(tweet_details)
+
+            counter += 1
+            if(counter % 5000 == 0): print('collected' + str(counter) + 'valid tweets')
+            #if counter == 1000000:
+            #    break
+            #else:
+            #    pass
+    search_term_reformated = search_term.replace(" ", "_")
+    with open('data/{}.json'.format(search_term_reformated), 'w') as f:
+        json.dump(data, f)
+        print('done!')
 
 
 
@@ -193,8 +243,3 @@ def get_n_recent_tweets(screen_name, n = 3240, since_id = 1200068469913530369):
             , '1990-01-01'
             , ''
             , 0]]
-
-
-
-
-
