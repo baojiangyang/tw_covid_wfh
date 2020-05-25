@@ -50,7 +50,7 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 n_gpu = torch.cuda.device_count()
 torch.cuda.get_device_name(0)
 
-data_output_file = "/home/paperspace/Documents/twitter/data/affect_data/ei_oc_angry.csv"
+data_output_file = "/home/paperspace/Documents/twitter/data/affect_data/e_c_angry.csv"
 
 label_text = pd.read_csv(data_output_file)
 
@@ -142,7 +142,7 @@ validation_dataloader = DataLoader(validation_data, sampler=validation_sampler, 
 
 print("finished setting batch size")
 
-model = BertForSequenceClassification.from_pretrained("bert-base-uncased", num_labels=4)
+model = BertForSequenceClassification.from_pretrained("bert-base-uncased", num_labels=2)
 model.cuda()
 
 print("finished loading bert-base-uncased")
@@ -197,7 +197,7 @@ print(compute_metrics([1,1,1,1], [0,0,1,1]))
 train_loss_set = []
 
 # Number of training epochs (authors recommend between 2 and 4)
-epochs = 50
+epochs = 8
 
 
 
@@ -275,7 +275,7 @@ for _ in trange(epochs, desc="Epoch"):
 
 from pytorch_pretrained_bert import WEIGHTS_NAME, CONFIG_NAME
 
-output_dir = "/home/paperspace/Documents/twitter/model/affect_model/"
+output_dir = "/home/paperspace/Documents/twitter/model/affect_model/ec_angry"
 
 # Step 1: Save a model, configuration and vocabulary that you have fine-tuned
 
