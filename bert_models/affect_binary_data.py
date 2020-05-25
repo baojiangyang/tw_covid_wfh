@@ -2,6 +2,13 @@ import numpy as np
 import pandas as pd
 import os
 
+import sys
+
+label_name = sys.argv[1]
+label_names = ['anger', 'anticipation','disgust','fear','joy','love','optimism','pessimism','sadness','surprise','trust']
+label_index = label_names.index(label_name) + 2
+print(label_index)
+
 input_dir = "/home/paperspace/Documents/twitter/data/affect_data/SemEval2018-Task1-all-data/English/E-c"
 
 train_name = "2018-E-c-En-train.txt"
@@ -11,19 +18,20 @@ test_name = "2018-E-c-En-test-gold.txt"
 train_file = os.path.join(input_dir, train_name)
 dev_file = os.path.join(input_dir, dev_name)
 test_file = os.path.join(input_dir, test_name)
-data_output_file = "/home/paperspace/Documents/twitter/data/affect_data/e_c_angry.csv"
+data_output_file = "/home/paperspace/Documents/twitter/data/affect_data/e_c_{}.csv".format(label_name)
 
 train = pd.read_csv(train_file, header=None, sep="\t",encoding='latin')
 dev = pd.read_csv(dev_file, header=None, sep="\t",encoding='latin')
 test = pd.read_csv(test_file, header=None, sep="\t",encoding='latin')
 
-train = train.loc[2:]
-dev = dev.loc[2:]
-test = test.loc[2:]
+train = train.loc[1:]
+dev = dev.loc[1:]
+test = test.loc[1:]
 
 df = train.append([dev, test])
+print(df.head(5))
 
-label_text = df[[1, 2]]
+label_text = df[[1, label_index]]
 #label_text[3] = label_text[3].apply(lambda x: x[0])
 
 # Convert labels to range 0-1

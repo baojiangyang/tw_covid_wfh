@@ -50,7 +50,12 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 n_gpu = torch.cuda.device_count()
 torch.cuda.get_device_name(0)
 
-data_output_file = "/home/paperspace/Documents/twitter/data/affect_data/e_c_angry.csv"
+
+import sys
+
+label_name = sys.argv[1]
+data_output_file = "/home/paperspace/Documents/twitter/data/affect_data/e_c_{}.csv".format(label_name)
+
 
 label_text = pd.read_csv(data_output_file)
 
@@ -275,7 +280,7 @@ for _ in trange(epochs, desc="Epoch"):
 
 from pytorch_pretrained_bert import WEIGHTS_NAME, CONFIG_NAME
 
-output_dir = "/home/paperspace/Documents/twitter/model/affect_model/ec_angry"
+output_dir = "/home/paperspace/Documents/twitter/model/affect_model/ec_{}".format(label_name)
 
 # Step 1: Save a model, configuration and vocabulary that you have fine-tuned
 
