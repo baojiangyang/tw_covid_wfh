@@ -280,7 +280,7 @@ for _ in trange(epochs, desc="Epoch"):
 
 from pytorch_pretrained_bert import WEIGHTS_NAME, CONFIG_NAME
 
-output_dir = "/home/paperspace/Documents/twitter/model/affect_model/ec_{}".format(label_name)
+output_dir = "/home/paperspace/Documents/twitter/model/affect_model/{}/".format(label_name)
 
 # Step 1: Save a model, configuration and vocabulary that you have fine-tuned
 
