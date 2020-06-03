@@ -1,0 +1,5 @@
+search_tweets_api:
+  account_type: premium
+  consumer_key: 1EfZQhitx7xPfHz25VCLpfjtR
+  consumer_secret: 5GZZcn5EFinqTggFeZKH3ObuOp019vYwPxNTqNvyZM78b5VIkh
+  endpoint: https://api.twitter.com/1.1/tweets/search/30day/covidwfh.json
