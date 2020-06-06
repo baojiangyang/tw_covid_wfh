@@ -28,7 +28,7 @@
 
 #### Command: 
 ##### cd tw_covid_wfh/tweets_collectors/sandbox 
-##### python collect_history.py "work_remotely_2020-05-03_2020-06-02.csv" "<outputname>.csv"
+##### python collect_history.py "work_remotely_2020-05-03_2020-06-02.csv" "outputname.csv"
 
 
 
