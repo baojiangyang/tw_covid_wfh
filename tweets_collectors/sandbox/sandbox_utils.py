@@ -213,7 +213,10 @@ def get_n_recent_tweets(screen_name, n = 3240, since_id = 1200068469913530369):
         # save most recent tweets
         alltweets.extend(new_tweets)
         # save the id of the oldest tweet less one
-        oldest = alltweets[-1].id - 1
+        if len(alltweets) == 0:
+            return [['1234', 'protected', '1990-01-01', '', 0]]
+        else:
+            oldest = alltweets[-1].id - 1
         print(oldest)
         if n>200 and oldest >= since_id:
             # keep grabbing tweets until there are no tweets left to grab
@@ -238,8 +241,6 @@ def get_n_recent_tweets(screen_name, n = 3240, since_id = 1200068469913530369):
         return outtweets
     except tweepy.TweepError:
         print("Failed to run the command on that user, Skipping...")
-        return [['1234'
-            , 'protected'
-            , '1990-01-01'
-            , ''
-            , 0]]
+    # if error occurs return a default void tweet
+    return [['1234', 'protected', '1990-01-01', '', 0]]
+
