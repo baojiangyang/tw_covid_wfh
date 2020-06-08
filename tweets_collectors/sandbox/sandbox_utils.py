@@ -231,16 +231,28 @@ def get_n_recent_tweets(screen_name, n = 3240, since_id = 1200068469913530369):
                 #print("...%s tweets downloaded so far" % (len(alltweets)))
 
         # transform the tweepy tweets into a 2D array that will populate the csv
-        outtweets = [[tweet.id_str
-            , tweet.user.screen_name
-            , tweet.created_at.strftime("%d-%b-%Y")
-            , tweet.text
-            , tweet.retweet_count
-            #, tweet.user.followers_count
-            ] for tweet in alltweets]
-        return outtweets
+        #outtweets = [[tweet.id_str
+        #    , tweet.user.screen_name
+        #    , tweet.created_at.strftime("%d-%b-%Y")
+        #    , tweet.text
+        #    , tweet.retweet_count
+        #    #, tweet.user.followers_count
+        #    ] for tweet in alltweets]
+        
+        outtweets = []
+        for tweet in alltweets:
+            if tweet.lang == 'en':
+            #if not tweet.retweeted and ('RT @' not in tweet.text) and tweet.lang == 'en':
+                outtweets.append([tweet.id_str
+                    , tweet.user.screen_name
+                    , tweet.created_at.strftime("%d-%b-%Y")
+                    , tweet.text
+                    , tweet.retweet_count
+                    ])
+        if len(outtweets)>0:
+            return outtweets
     except tweepy.TweepError:
         print("Failed to run the command on that user, Skipping...")
     # if error occurs return a default void tweet
-    return [['1234', 'protected', '1990-01-01', '', 0]]
+    return [['1234', '', '1990-01-01', '', 0]]
 

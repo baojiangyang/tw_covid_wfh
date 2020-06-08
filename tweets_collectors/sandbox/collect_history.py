@@ -13,21 +13,30 @@ df = pd.read_csv(file_name)
 
 print(df.head(10))
 
-print(df.shape)
 
-print(df.screen_name.nunique())
+print('Processing number of users: ' + str(df.screen_name.nunique()))
 
 df_users = df.screen_name.unique()
 #wfh_users = wfh['name'].sample(n = 10)
-print(type(df_users))
 
 
 tweets_from_names = []
 
+cnt = 0
+part = 0
+cum_tweets = 0
 for i in df_users: 
     twts = get_n_recent_tweets(i)
-    print('get ' + str(len(twts)) + ' tweets from user:' + str(i))
+    cum_tweets += len(twts)
+    print('get ' + str(len(twts)) + ' tweets from user:' + str(i) + ' (processed ' + str(cnt) + ' users with ' + str(cum_tweets) + ' tweets)')
     tweets_from_names.extend(twts)
+    cnt += 1
+    if len(tweets_from_names) > 1000000:
+        df_tweets  = pd.DataFrame(tweets_from_names, columns =['id', 'name','created','text','retweet_counts'])
+        df_tweets.to_csv('part'+str(part)+hist_file_name, index = False)
+        print('saved ' + str(cnt) + ' tweets in file: ' + 'part'+str(part)+hist_file_name )
+        tweets_from_names = []
+        part += 1
 
 print(tweets_from_names[0])
 print(len(tweets_from_names))
@@ -44,10 +53,10 @@ print(df_tweets.head(10))
 #print(data.shape)
 #print(data.head(10))
 #print(data.name.nuniqe())
+df_tweets.to_csv('part'+str(part)+hist_file_name, index = False)
+print('saved ' + str(cnt) + ' tweets in file: ' + 'part'+str(part)+hist_file_name )
 
 
-
-df_tweets.to_csv(hist_file_name, index = False)
 
 
 
