@@ -202,7 +202,7 @@ print(compute_metrics([1,1,1,1], [0,0,1,1]))
 train_loss_set = []
 
 # Number of training epochs (authors recommend between 2 and 4)
-epochs = 8
+epochs = 5
 
 
 
