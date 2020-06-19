@@ -12,7 +12,7 @@ RESULTS_PER_CALL = 500  # 100 for sandbox, 500 for paid tiers
 #TO_DATE = '2020-05-28' # format YYYY-MM-DD HH:MM (hour and minutes optional)
 #FROM_DATE = '2020-04-28'  # format YYYY-MM-DD HH:MM (hour and minutes optional)
 
-MAX_RESULTS = 300000  # Number of Tweets you want to collect
+MAX_RESULTS = 500000  # Number of Tweets you want to collect
 
 # Script prints an update to the CLI every time it collected another X Tweets
 PRINT_AFTER_X = 1000

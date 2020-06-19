@@ -1,10 +1,17 @@
-
+import sys
+label = sys.argv[1]
+print(label)
 ## INIT
 API_KEY = '1EfZQhitx7xPfHz25VCLpfjtR'
 API_SECRET_KEY = '5GZZcn5EFinqTggFeZKH3ObuOp019vYwPxNTqNvyZM78b5VIkh'
-DEV_ENVIRONMENT_LABEL = 'covidwfh'
-API_SCOPE = '30day'  # 'fullarchive' for full archive, '30day' for last 31 days
 
+if(label == '30day'):
+    DEV_ENVIRONMENT_LABEL = 'covidwfh'
+    API_SCOPE = '30day'  # 'fullarchive' for full archive, '30day' for last 31 days
+if(label == 'fullarchive'):
+    DEV_ENVIRONMENT_LABEL = 'covidwfhfullarchive'
+    API_SCOPE = 'fullarchive'  # 'fullarchive' for full archive, '30day' for last 31 days
+    
 import yaml
 config = dict(
     search_tweets_api=dict(
