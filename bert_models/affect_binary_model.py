@@ -50,10 +50,18 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 n_gpu = torch.cuda.device_count()
 torch.cuda.get_device_name(0)
 
-
+# READING PARAMETERS
 import sys
 
 label_name = sys.argv[1]
+learning_rate = float(sys.argv[2])
+n_epoch = int(sys.argv[3])
+
+print("label name: " + str(label_name))
+print("learning rate: " + str(learning_rate))
+print("number of epoches: " + str(n_epoch))
+
+
 data_output_file = "/home/paperspace/Documents/twitter/data/affect_data/e_c_{}.csv".format(label_name)
 
 
@@ -168,7 +176,7 @@ print("finished setting different weight decays for different layers of the mode
 
 # This variable contains all of the hyperparemeter information our training loop needs
 optimizer = BertAdam(optimizer_grouped_parameters,
-                     lr=3e-5,
+                     lr=learning_rate,
                      warmup=.1)
 
 
@@ -202,7 +210,7 @@ print(compute_metrics([1,1,1,1], [0,0,1,1]))
 train_loss_set = []
 
 # Number of training epochs (authors recommend between 2 and 4)
-epochs = 5
+epochs = n_epoch
 
 
 
