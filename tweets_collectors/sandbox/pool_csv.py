@@ -100,7 +100,7 @@ if(False):
 
 ## remote working
 
-if(True):
+if(False):
     df1 = pd.read_csv('remote_working_2019-03-01_2019-06-01.csv')
     df2 = pd.read_csv('remote_working_2020-03-01_2020-03-15.csv')
     df3 = pd.read_csv('remote_working_2020-03-15_2020-06-02.csv')
@@ -109,3 +109,24 @@ if(True):
     print(df.head(5))
     print(df.shape)
     df.to_csv('output_data/remote_working_0301_0601.csv')
+
+
+## pooling all keywords
+
+if(True)
+    df1 = pd.read_csv('output_data/wfh_0301_0601.csv')
+    df2 = pd.read_csv('output_data/work_from_home_0301_0601.csv')
+    df3 = pd.read_csv('output_data/working_from_home_0301_0601.csv')
+    df4 = pd.read_csv('output_data/work_remotely_0301_0601.csv')
+    df5 = pd.read_csv('output_data/working_remotely_0301_0601.csv')
+    df6 = pd.read_csv('output_data/remote_work_0301_0601.csv')
+    df7 = pd.read_csv('output_data/remote_working_0301_0601.csv')
+    df = df1.append([df2, df3, df4, df5, df6, df7])
+    print(df.head(5))
+    print(df.shape)
+    df.to_csv('output_data/all_keywords_0301_0601.csv')
+
+
+
+
+
