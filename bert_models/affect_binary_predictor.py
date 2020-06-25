@@ -26,11 +26,12 @@ torch.cuda.get_device_name(0)
 # load and pre-format test data
 #test_data_file = "/home/paperspace/Documents/data/working_remotely_2020-05-07_2020-06-02.csv"
 
-data_file = sys.argv[2]
+data_file = "/home/paperspace/Documents/twitter/data/wfh_tweets_data/all_keywords_0301_0601.csv"
 
 id_text = pd.read_csv(data_file)
+print('Read raw data: ' + str(id_text.shape))
 
-id_text = id_text.loc[0:100]
+id_text = id_text.loc[0:10000]
 
 id_text = id_text[['id_str','text']]
 
@@ -121,7 +122,7 @@ if(True):
         d = {'id_str':id_strs, 'logit':preds}
         df = pd.DataFrame(d)
         convert_dict = {'id_str': str,'logit': int}
-        df = df.astype(convert_dict))
+        df = df.astype(convert_dict)
         output_predictions.append(df)
 
     output_predictions = pd.concat(output_predictions)
