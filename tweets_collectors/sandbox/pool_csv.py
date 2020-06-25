@@ -113,7 +113,7 @@ if(False):
 
 ## pooling all keywords
 
-if(True)
+if(True):
     df1 = pd.read_csv('output_data/wfh_0301_0601.csv')
     df2 = pd.read_csv('output_data/work_from_home_0301_0601.csv')
     df3 = pd.read_csv('output_data/working_from_home_0301_0601.csv')
