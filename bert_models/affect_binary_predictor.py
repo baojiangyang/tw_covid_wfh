@@ -24,8 +24,11 @@ n_gpu = torch.cuda.device_count()
 torch.cuda.get_device_name(0)
 
 # load and pre-format test data
-test_data_file = "/home/paperspace/Documents/data/working_remotely_2020-05-07_2020-06-02.csv"
-id_text = pd.read_csv(test_data_file)
+#test_data_file = "/home/paperspace/Documents/data/working_remotely_2020-05-07_2020-06-02.csv"
+
+data_file = sys.argv[2]
+
+id_text = pd.read_csv(data_file)
 
 id_text = id_text.loc[0:100]
 
@@ -34,6 +37,7 @@ id_text = id_text[['id_str','text']]
 print(id_text.head( 10))
 
 id_strs = id_text.id_str.values
+#id_strs = [str(i) for i in id_strs]
 sentences = id_text.text.values
 sentences = ["[CLS] " + sentence + " [SEP]" for sentence in sentences]
 
@@ -97,29 +101,36 @@ model.eval()
 
 
 # Predict data by minibatch
-output_predictions = []
-for batch in test_dataloader:
-    # Add batch to GPU
-    batch = tuple(t.to(device) for t in batch)
-    # Unpack the inputs from our dataloader
-    b_input_ids, b_input_mask, b_idstrs = batch
-    # Telling the model not to compute or store gradients, saving memory and speeding up validation
-    with torch.no_grad():
-        # Forward pass, calculate logit predictions
-        logits = model(b_input_ids, token_type_ids=None, attention_mask=b_input_mask)
+if(True):
+    output_predictions = []
+    for batch in test_dataloader:
+        # Add batch to GPU
+        batch = tuple(t.to(device) for t in batch)
+        # Unpack the inputs from our dataloader
+        b_input_ids, b_input_mask, b_idstrs = batch
+        # Telling the model not to compute or store gradients, saving memory and speeding up validation
+        with torch.no_grad():
+            # Forward pass, calculate logit predictions
+            logits = model(b_input_ids, token_type_ids=None, attention_mask=b_input_mask)
 
-    # Move logits and labels to CPU
-    logits = logits.detach().cpu().numpy()
-    id_strs = b_idstrs.to('cpu').numpy()
-    preds = np.argmax(logits, axis=1).flatten()
-    d = {'id_str':id_strs, 'logit':preds}
-    df = pd.DataFrame(d)
-    convert_dict = {'id_str': str,'logit': int}
-    df = df.astype(convert_dict)
-    print(df)
-    output_predictions.append(df)
+        # Move logits and labels to CPU
+        logits = logits.detach().cpu().numpy()
+        id_strs = b_idstrs.to('cpu').numpy()
+        id_strs = [int(id) for id in id_strs]
+        preds = np.argmax(logits, axis=1).flatten()
+        d = {'id_str':id_strs, 'logit':preds}
+        df = pd.DataFrame(d)
+        convert_dict = {'id_str': str,'logit': int}
+        df = df.astype(convert_dict))
+        output_predictions.append(df)
 
-output_predictions = pd.concat(output_predictions)
+    output_predictions = pd.concat(output_predictions)
+
+print(output_predictions.shape)
+print(output_predictions.head(5))
+
 output_predictions.to_csv('test.csv')
+
+print('Finshed processing ' + str(output_predictions.shape[0]) + ' tweets!')
 
 
