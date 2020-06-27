@@ -31,14 +31,19 @@ data_file = "/home/paperspace/Documents/twitter/data/wfh_tweets_data/all_keyword
 id_text = pd.read_csv(data_file)
 print('Read raw data: ' + str(id_text.shape))
 
-id_text = id_text.loc[0:10000]
-
+#id_text = id_text.sort_values(by=['id_str'])
+id_text = id_text.loc[0:1000]
+print(id_text)
 id_text = id_text[['id_str','text']]
-
+id_text['fake_id'] = np.arange(len(id_text))
 print(id_text.head( 10))
 
-id_strs = id_text.id_str.values
-#id_strs = [str(i) for i in id_strs]
+
+fake_ids = id_text.fake_id.values
+fake_ids = [int(i) for i in fake_ids]
+print(fake_ids)
+
+
 sentences = id_text.text.values
 sentences = ["[CLS] " + sentence + " [SEP]" for sentence in sentences]
 
@@ -82,12 +87,12 @@ for seq in input_ids:
 
 test_inputs = torch.tensor(input_ids)
 test_masks = torch.tensor(attention_masks)
-id_strs = torch.Tensor(id_strs)
+fake_ids = torch.Tensor(fake_ids)
 print("set batch size")
 batch_size = 32
 
 
-test_data = TensorDataset(test_inputs, test_masks, id_strs)
+test_data = TensorDataset(test_inputs, test_masks, fake_ids)
 
 test_sampler = SequentialSampler(test_data)
 test_dataloader = DataLoader(test_data, sampler=test_sampler, batch_size=batch_size)
@@ -99,6 +104,16 @@ model.cuda()
 
 # Put model in evaluation mode to evaluate loss on the validation set
 model.eval()
+
+
+if(False):
+    with torch.no_grad():
+        # Forward pass, calculate logit predictions
+        logits = model(input_ids, token_type_ids=None)
+        # Move logits and labels to CPU
+        logits = logits.detach().cpu().numpy()
+        preds = np.argmax(logits, axis=1).flatten()
+        print(preds)
 
 
 # Predict data by minibatch
@@ -116,19 +131,22 @@ if(True):
 
         # Move logits and labels to CPU
         logits = logits.detach().cpu().numpy()
-        id_strs = b_idstrs.to('cpu').numpy()
-        id_strs = [int(id) for id in id_strs]
+        b_fake_ids = b_idstrs.to('cpu').numpy()
+        b_fake_ids = [int(id) for id in b_fake_ids]
+        print(b_fake_ids)
         preds = np.argmax(logits, axis=1).flatten()
-        d = {'id_str':id_strs, 'logit':preds}
+        d = {'fake_id':b_fake_ids, 'logit':preds}
         df = pd.DataFrame(d)
-        convert_dict = {'id_str': str,'logit': int}
+        convert_dict = {'fake_id': int,'logit': int}
         df = df.astype(convert_dict)
         output_predictions.append(df)
 
     output_predictions = pd.concat(output_predictions)
 
+output_predictions = pd.merge(id_text, output_predictions, on='fake_id')
+
 print(output_predictions.shape)
-print(output_predictions.head(5))
+print(output_predictions.head(10))
 
 output_predictions.to_csv('test.csv')
 
