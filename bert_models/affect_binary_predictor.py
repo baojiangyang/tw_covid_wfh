@@ -37,7 +37,7 @@ id_text = pd.read_csv(data_file)
 print('Read raw data: ' + str(id_text.shape))
 
 #id_text = id_text.sort_values(by=['id_str'])
-#id_text = id_text.loc[0:100]
+#id_text = id_text.loc[0:50000]
 print(id_text)
 id_text = id_text[['id_str','text']]
 id_text['fake_id'] = np.arange(len(id_text))

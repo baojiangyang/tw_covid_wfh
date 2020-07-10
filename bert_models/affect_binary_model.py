@@ -119,9 +119,9 @@ for seq in input_ids:
 # Use train_test_split to split our data into train and validation sets for training
 
 train_inputs, validation_inputs, train_labels, validation_labels = train_test_split(input_ids, labels,
-                                                            random_state=2018, test_size=0.1)
+                                                            random_state=2018, test_size=0.2)
 train_masks, validation_masks, _, _ = train_test_split(attention_masks, input_ids,
-                                             random_state=2018, test_size=0.1)
+                                             random_state=2018, test_size=0.2)
 
 
 
